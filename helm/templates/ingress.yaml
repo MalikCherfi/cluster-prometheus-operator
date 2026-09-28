@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: grafana
+  name: monitoring
   namespace: {{ .Values.namespace }}
 spec:
   ingressClassName: nginx
@@ -20,3 +20,10 @@ spec:
                 name: {{ .Values.grafana.service }}
                 port:
                   number: {{ .Values.grafana.port }}
+          - path: {{ .Values.prometheus.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.prometheus.service }}
+                port:
+                  number: {{ .Values.prometheus.port }}
