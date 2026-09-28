@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-proxy
+  name: grafana
   namespace: {{ .Values.namespace }}
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - {{ .Values.domain }}
-      secretName: motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin
+      secretName: {{ .Values.tlsSecret }}
   rules:
     - host: {{ .Values.domain }}
       http:
@@ -17,6 +17,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: demo-service
+                name: {{ .Values.grafana.service }}
                 port:
-                  number: 80
+                  number: {{ .Values.grafana.port }}
