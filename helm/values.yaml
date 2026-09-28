@@ -4,3 +4,7 @@ tlsSecret: motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmai
 grafana:
   service: kube-prometheus-stack-grafana
   port: 80
+prometheus:
+  service: kube-prometheus-stack-prometheus
+  port: 9090
+  path: /prometheus
