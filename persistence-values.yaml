@@ -1,0 +1,50 @@
+# persistence-values.yaml
+
+# ─────────────────────────────────────────────
+# PROMETHEUS
+# ─────────────────────────────────────────────
+prometheus:
+  prometheusSpec:
+    # Rétention des métriques
+    retention: 30d
+    retentionSize: "45GB"  # Laisse une marge sous la taille du disque
+
+    # Persistance des données
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: managed-csi
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+
+# ─────────────────────────────────────────────
+# ALERTMANAGER
+# ─────────────────────────────────────────────
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: managed-csi
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+# ─────────────────────────────────────────────
+# GRAFANA
+# ─────────────────────────────────────────────
+grafana:
+  # Persistance des données Grafana (dashboards, users, etc.)
+  persistence:
+    enabled: true
+    type: sts          # StatefulSet (recommandé pour la persistance)
+    storageClassName: managed-csi
+    accessModes:
+      - ReadWriteOnce
+    size: 5Gi
+
+  # Le datasource Prometheus est configuré automatiquement par le chart.
+  # On le vérifie plus bas.
