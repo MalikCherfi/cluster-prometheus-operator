@@ -1,2 +1,6 @@
-namespace: "kawabunga-app"
-domain: "tortueninja.spaincentral.cloudapp.azure.com"
+namespace: kowabunga-monitoring
+domain: tortueninja.spaincentral.cloudapp.azure.com
+tlsSecret: motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin
+grafana:
+  service: kube-prometheus-stack-grafana
+  port: 80
