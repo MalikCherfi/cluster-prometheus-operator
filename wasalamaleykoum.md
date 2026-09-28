@@ -39,7 +39,7 @@ alors uninstall : `helm uninstall prometheus-operator-crds -n kowabunga-monitori
 
 Et purée de pomme de terre, cette stack elle a installé un milliard de choses, on peut les voir avec kubectl get deployments, et get pods (dans le bon namespace)  
 
-et après cette verivication je me rends compte que helm à fait 4 des étapes du tp pour moi, merci helm, 5 étapes même !!
+et après cette verivication je me rends compte que helm à fait 4 des étapes du tp pour moi, merci helm, 5 étapes même !! wesh 6 etapes carrement !! ça fume tout !!!
 
 ## ce sont des guerriers fantastiques, Ils sortent les nunchakus, c'est la panique !!!!!! (persistence des données ? peut etre)
 
@@ -51,3 +51,23 @@ on peut observer les volumes qui ont été créé avec pvc (`kubectl get pvc -n 
 ## tortues ninja ! tourntues ninjas ! tortues ninja ! tortues ninja !
 
 Bon là j'sais plus ce que ce fais, en gros
+
+Si tu veux impressionner le jury, tu peux mentionner dans ton README :
+
+    "Nous avons choisi un routage path-based car le domaine cloudapp.azure.com ne permet pas la création de sous-domaines. En production, nous aurions utilisé un domaine dédié avec des sous-domaines (grafana.kowabunga.io, prometheus.kowabunga.io) pour bénéficier d'une meilleure isolation."
+
+Pour vérifier les travaux du stagiaire, ya les classique:  
+```bash
+kubectl get pods -n cert-manager
+kubectl get crds | grep cert-manager
+kubectl get clusterissuers -o wide
+kubectl get certificates -A
+kubectl get certificaterequest,order,challenge -A
+kubectl get secret motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin -o wide
+kubectl get secret motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin -n kowabunga-monitoring -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl x509 -noout -text
+kubectl get svc -n ingress-nginx ingress-nginx-controller -o wide
+kubectl get ingress -A
+kubectl describe ingress monitoring -n kowabunga-monitoring
+```
+
+j'sais pas à quoi ça sert mais ça verifie bien 👍
