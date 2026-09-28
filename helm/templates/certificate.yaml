@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificatquirendsure
+  namespace: {{ .Values.namespace }}
+spec:
+  secretName: motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin
+  duration: 1h
+  renewBefore: 30m
+  dnsNames:
+    - {{ .Values.domain }}
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
