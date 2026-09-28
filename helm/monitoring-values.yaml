@@ -1,0 +1,4 @@
+prometheus:
+  prometheusSpec:
+    routePrefix: /prometheus
+    externalUrl: https://tortueninja.spaincentral.cloudapp.azure.com/prometheus
