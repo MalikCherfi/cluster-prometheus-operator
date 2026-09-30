@@ -8,3 +8,7 @@ prometheus:
   service: kube-prometheus-stack-prometheus
   port: 9090
   path: /prometheus
+alertmanager:
+  service: kube-prometheus-stack-alertmanager
+  port: 9093
+  path: /alertmanager
