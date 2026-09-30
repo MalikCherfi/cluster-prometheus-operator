@@ -235,3 +235,8 @@ citation de deepseek :
 > L'authentification de cert-manager auprès de Vault se fait via la méthode Kubernetes (ServiceAccount token), sans aucun secret statique. Le rôle Vault applique le principe du moindre privilège : seule la signature pour le domaine `tortueninja.spaincentral.cloudapp.azure.com` est autorisée, avec une durée maximale de 24 heures.
 
 alors c'est cool, mais mozzila me dis toujours de me méfier (pcq c'est autosigné ? je sais pas, je sais même pas si ça compte encore comme du auto signé)
+
+alors je vais essayer de retranscrire ce que je comprends, de l'explication de monsieur 深度求索 (deepseek):  
+en gros c'est pas autosigné pcq c'est le vault pki qui signe, et mozzila quand il check si le certificat est safe, il remonte jusqu'au certificat root et il check dans ça base de donnée si c'est un root safe validé tout ça mais là c'est une Autorité de certification inconnue (donc pas de chance)  
+
+si on veut on peut importer le certificat root qu'on a créé dans le trust store de mozzila ou de l'os directement mais j'ai la flemme.
