@@ -223,3 +223,15 @@ CA VEUT DIRE QUE LE PKI FONCTIONNE JE CROIS (source: deepseek)
 
 ok donc si j'ai bien compris maintenant c'est le moment où je poeux tout casser, en gros modifier le certificate pour qu'il utilise le VaultIssuer au lieu du ClusterIssuer self-signed (hihi)
 
+donc je modifie le certificate, et j'applique le changement avec helm `helm upgrade kawabunga ./helm -n kowabunga-monitoring`  
+on supprime le secret TLS pour forcer une nouvelle demande qui sera faite au vault cette fois ci normalement `kubectl delete secret motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin -n kowabunga-monitoring`  
+ça à l'air d'avoir fonctionné avec `kubectl get secret motdepasseducertbeaucouptroplongmaissecuredeoufavecunarobasealafinmaispasvraimentparcequonapasledroitdelemettrealafin -n kowabunga-monitoring -o jsonpath='{.data.tls\.crt}' | base64 -d | openssl x509 -noout -issuer -subject -dates` on voit que l'issuer c'est "Kowabunga Intermediate CA" et c'est vault qui fait ça, et si on inspecte le certificat sur le site, on voit que au dessus de intermediate on a root.
+
+citation de deepseek :  
+> Le certificat utilisé par l'Ingress est émis dynamiquement par une PKI HashiCorp Vault hébergée dans le cluster. La chaîne de confiance est la suivante :
+> 
+> `Ingress → certificat feuille (signé par) → Kowabunga Intermediate CA → (signé par) → Kowabunga Root CA`
+> 
+> L'authentification de cert-manager auprès de Vault se fait via la méthode Kubernetes (ServiceAccount token), sans aucun secret statique. Le rôle Vault applique le principe du moindre privilège : seule la signature pour le domaine `tortueninja.spaincentral.cloudapp.azure.com` est autorisée, avec une durée maximale de 24 heures.
+
+alors c'est cool, mais mozzila me dis toujours de me méfier (pcq c'est autosigné ? je sais pas, je sais même pas si ça compte encore comme du auto signé)

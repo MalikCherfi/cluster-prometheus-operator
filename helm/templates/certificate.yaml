@@ -5,10 +5,10 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   secretName: {{ .Values.tlsSecret }}
-  duration: 1h05m
+  duration: 24h
   renewBefore: 1h
   dnsNames:
     - {{ .Values.domain }}
   issuerRef:
-    name: selfsigned-issuer
-    kind: ClusterIssuer
+    name: vault-issuer
+    kind: Issuer
