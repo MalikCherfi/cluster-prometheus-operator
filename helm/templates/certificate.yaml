@@ -5,8 +5,8 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   secretName: {{ .Values.tlsSecret }}
-  duration: 1h
-  renewBefore: 30m
+  duration: 1h05m
+  renewBefore: 1h
   dnsNames:
     - {{ .Values.domain }}
   issuerRef:
