@@ -27,3 +27,10 @@ spec:
                 name: {{ .Values.prometheus.service }}
                 port:
                   number: {{ .Values.prometheus.port }}
+          - path: {{ .Values.alertmanager.path }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.alertmanager.service }}
+                port:
+                  number: {{ .Values.alertmanager.port }}
