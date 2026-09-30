@@ -1,0 +1,21 @@
+alertmanager:
+  alertmanagerSpec:
+    routePrefix: /alertmanager
+    externalUrl: https://tortueninja.spaincentral.cloudapp.azure.com/alertmanager
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: default
+      group_by: ["alertname", "namespace"]
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      routes:
+        - receiver: cert-manager-critical
+          matchers:
+            - alertname=~"CertManagerCertExpired|CertManagerCertNotReady"
+          continue: true
+    receivers:
+      - name: default
+      - name: cert-manager-critical
