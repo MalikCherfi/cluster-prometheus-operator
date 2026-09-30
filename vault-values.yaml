@@ -1,0 +1,19 @@
+# vault-values.yaml
+server:
+  # On active la persistance pour ne pas perdre les données de la PKI
+  dataStorage:
+    enabled: true
+    size: 10Gi
+    storageClass: managed-csi  # Le même StorageClass que pour ta stack de monitoring
+    accessMode: ReadWriteOnce
+
+  # On expose l'UI de Vault (très pratique pour visualiser la PKI)
+  ui:
+    enabled: true
+
+  # On désactive le mode dev (déjà le défaut, mais c'est plus explicite)
+  dev:
+    enabled: false
+
+# On garde le service en ClusterIP : on n'a pas besoin d'y accéder de l'extérieur pour l'instant
+# On utilisera un port-forward pour l'initialisation.
