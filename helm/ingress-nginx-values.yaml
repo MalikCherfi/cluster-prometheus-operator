@@ -1,0 +1,8 @@
+# ingress-nginx-values.yaml
+controller:
+  service:
+    loadBalancerIP: "158.158.39.236"
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-resource-group: "MC_Leith_letudiant_kowabungalecridesninjas_spaincentral"
+      service.beta.kubernetes.io/azure-dns-label-name: "tortueninja"
+      service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: /healthz
