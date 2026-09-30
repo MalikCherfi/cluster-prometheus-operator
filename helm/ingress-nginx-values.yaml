@@ -1,4 +1,3 @@
-# ingress-nginx-values.yaml
 controller:
   service:
     loadBalancerIP: "158.158.39.236"
