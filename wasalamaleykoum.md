@@ -188,3 +188,38 @@ policy/kowabunga-pki-policy
 ```
 
 ### Créer un VaultIssuer
+
+on cree le service account vault-issuer `kubectl apply -f vault-issuer-sa.yaml`  
+on cree un petit role qu'on attribue au cert-manager `kubectl apply -f vault-issuer-rbac.yaml`  
+on cree le issuer (j'sais pas trop ce que c'est, ce qu'il fait) `kubectl apply -f vault-issuer.yaml`  
+y a un problème : ServiceAccount qui tente de s'authentifier auprès de Vault (vault-issuer) n'est pas celui que le rôle Vault cert-manager est autorisé à accepter, donc on modifie, donc on modifie le rôle Vault pour qu'il accepte le ServiceAccount vault-issuer.  
+pour ça on se reconnecte au pod du vault et on modifie comme ça  
+```bash
+# Dans le shell du pod Vault
+vault write auth/kubernetes/role/cert-manager \
+  bound_service_account_names=vault-issuer \
+  bound_service_account_namespaces=kowabunga-monitoring \
+  policies=kowabunga-pki-policy \
+  ttl=1h
+```  
+on peut supprimer le vault issuer et le re appliquer pour être sûr que c'est bien passé `kubectl delete -f vault-issuer.yaml` et `kubectl apply -f vault-issuer.yaml`  
+là quand on verifie, y a pas d'erreur normalement (`kubectl describe issuer vault-issuer -n kowabunga-monitoring`)  
+on a un autre probleme notre vault demande un common_name pour repondre à la demande de signature (si j'ai bien compris) et cert manager n'en envoie pas (en meme temps c'est deprecié depuis l'an 2000 askip), donc on va re rentrer dans le pod vault et lui dire, c'est bon trkl pas besoin du cname  
+```bash
+vault write pki_int/roles/kowabunga-role \
+  allowed_domains="tortueninja.spaincentral.cloudapp.azure.com" \
+  allow_subdomains=false \
+  allow_bare_domains=true \
+  max_ttl="720h" \
+  key_type="rsa" \
+  key_bits=2048 \
+  require_cn=false
+```  
+maintenant si on applique notre certificat test `kubectl apply -f test-certificate.yaml`  
+et qu'on le check `kubectl get certificate vault-test-cert -n kowabunga-monitoring` on voit que le ready est true  
+CA VEUT DIRE QUE LE PKI FONCTIONNE JE CROIS (source: deepseek)  
+
+### Utiliser le VaultIssuer
+
+ok donc si j'ai bien compris maintenant c'est le moment où je poeux tout casser, en gros modifier le certificate pour qu'il utilise le VaultIssuer au lieu du ClusterIssuer self-signed (hihi)
+

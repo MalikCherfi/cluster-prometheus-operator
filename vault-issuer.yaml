@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: vault-issuer
+  namespace: kowabunga-monitoring
+spec:
+  vault:
+    # URL du service Vault (interne au cluster)
+    server: http://vault.vault.svc:8200
+    
+    # Chemin de signature dans Vault (doit utiliser l'endpoint 'sign')
+    path: pki_int/sign/kowabunga-role
+    
+    # Configuration de l'authentification
+    auth:
+      kubernetes:
+        # Nom du rôle Vault (créé à l'étape 4.5)
+        role: cert-manager
+        
+        # Chemin de montage de l'auth Kubernetes dans Vault
+        mountPath: /v1/auth/kubernetes
+        
+        # Référence au ServiceAccount que cert-manager va utiliser
+        serviceAccountRef:
+          name: vault-issuer
